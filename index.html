@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors | CodeHub</title>
+    <style>
+      /* Import Google font - Poppins */
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f6f7fb;
+        position: relative;
+      }
+      ::selection {
+        color: #fff;
+        background-color: green;
+      }
+      .container {
+        padding: 2rem 7rem;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+      .result_images {
+        display: flex;
+        column-gap: 7rem;
+      }
+      .container.start .user_result {
+        transform-origin: left;
+        animation: userShake 0.7s ease infinite;
+      }
+      @keyframes userShake {
+        50% {
+          transform: rotate(10deg);
+        }
+      }
+
+      .container.start .cpu_result {
+        transform-origin: right;
+        animation: cpuShake 0.7s ease infinite;
+      }
+      @keyframes cpuShake {
+        50% {
+          transform: rotate(-10deg);
+        }
+      }
+      .result_images img {
+        width: 100px;
+      }
+      .user_result img {
+        transform: rotate(90deg);
+      }
+      .cpu_result img {
+        transform: rotate(-90deg) rotateY(180deg);
+      }
+      .result {
+        text-align: center;
+        font-size: 2rem;
+        color: green;
+        margin-top: 1.5rem;
+      }
+
+      .option_image img {
+        width: 50px;
+      }
+      .option_images {
+        display: flex;
+        align-items: center;
+        margin-top: 2.5rem;
+        justify-content: space-between;
+      }
+      .container.start .option_images {
+        pointer-events: none;
+      }
+      .option_image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        opacity: 0.5;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+      }
+      .option_image:hover {
+        opacity: 1;
+      }
+      .option_image.active {
+        opacity: 1;
+      }
+      .option_image img {
+        pointer-events: none;
+      }
+      .option_image p {
+        color: green;
+        font-size: 1.235rem;
+        margin-top: 1rem;
+        pointer-events: none;
+      }
+      /* Centered Watermark style */
+      .watermark {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        color: #aaa;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="container">
+      <div class="result_field">
+        <div class="result_images">
+          <span class="user_result">
+            <img src="images/rock.png" alt="" />
+          </span>
+          <span class="cpu_result">
+            <img src="images/rock.png" alt="" />
+          </span>
+        </div>
+        <div class="result">Let's Play!!</div>
+      </div>
+
+      <div class="option_images">
+        <span class="option_image">
+          <img src="images/rock.png" alt="" />
+          <p>Rock</p>
+        </span>
+        <span class="option_image">
+          <img src="images/paper.png" alt="" />
+          <p>Paper</p>
+        </span>
+        <span class="option_image">
+          <img src="images/scissors.png" alt="" />
+          <p>Scissors</p>
+        </span>
+      </div>
+    </section>
+
+    <!-- Centered Watermark -->
+    <div class="watermark">Created by Kanishk Raj</div>
+
+    <script>
+      // Get DOM elements
+      const gameContainer = document.querySelector(".container"),
+        userResult = document.querySelector(".user_result img"),
+        cpuResult = document.querySelector(".cpu_result img"),
+        result = document.querySelector(".result"),
+        optionImages = document.querySelectorAll(".option_image");
+
+      // Loop through each option image element
+      optionImages.forEach((image, index) => {
+        image.addEventListener("click", (e) => {
+          image.classList.add("active");
+
+          userResult.src = cpuResult.src = "images/rock.png";
+          result.textContent = "Wait...";
+
+          // Loop through each option image again
+          optionImages.forEach((image2, index2) => {
+            // If the current index doesn't match the clicked index
+            // Remove the "active" class from the other option images
+            index !== index2 && image2.classList.remove("active");
+          });
+
+          gameContainer.classList.add("start");
+
+          // Set a timeout to delay the result calculation
+          let time = setTimeout(() => {
+            gameContainer.classList.remove("start");
+
+            // Get the source of the clicked option image
+            let imageSrc = e.target.querySelector("img").src;
+            // Set the user image to the clicked option image
+            userResult.src = imageSrc;
+
+            // Generate a random number between 0 and 2
+            let randomNumber = Math.floor(Math.random() * 3);
+            // Create an array of CPU image options
+            let cpuImages = ["images/rock.png", "images/paper.png", "images/scissors.png"];
+            // Set the CPU image to a random option from the array
+            cpuResult.src = cpuImages[randomNumber];
+
+            // Assign a letter value to the CPU option (R for rock, P for paper, S for scissors)
+            let cpuValue = ["R", "P", "S"][randomNumber];
+            // Assign a letter value to the clicked option (based on index)
+            let userValue = ["R", "P", "S"][index];
+
+            // Create an object with all possible outcomes
+            let outcomes = {
+              RR: "Draw",
+              RP: "Cpu",
+              RS: "You",
+              PP: "Draw",
+              PR: "You",
+              PS: "Cpu",
+              SS: "Draw",
+              SR: "Cpu",
+              SP: "You",
+            };
+
+            // Look up the outcome value based on user and CPU options
+            let outComeValue = outcomes[userValue + cpuValue];
+
+            // Display the result
+            result.textContent = userValue === cpuValue ? "Match Draw" : `${outComeValue} Won!!`;
+          }, 2500);
+        });
+      });
+    </script>
+  </body>
+</html>
