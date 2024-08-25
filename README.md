@@ -1,2 +1,11 @@
-# Rock-Paper-Scissors_Game.kr
-A simple, interactive Rock-Paper-Scissors game built with HTML, CSS, and JavaScript. Players can choose between rock, paper, or scissors, with the game randomly selecting the CPU's choice. The game displays the result with animations.
+# Rock-Paper-Scissors Game
+
+🗃️ **A simple, interactive Rock-Paper-Scissors game built with HTML, CSS, and JavaScript.**
+
+## 📋 Features
+- Play against the CPU with a choice of Rock, Paper, or Scissors.
+- Interactive UI with animations for a fun gaming experience.
+- Displays the result of the match: Win, Lose, or Draw.
+- Centered watermark "Created by Kanishk Raj."
+
+## 🚀 Happy Coding 😊🖥️
